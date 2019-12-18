@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"bilibili/log/internal/filewriter"
+	"github.com/zhanghj7/bilibili/log/internal/filewriter"
 )
 
 // level idx

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	xtime "bilibili/time"
+	xtime "github.com/zhanghj7/bilibili/time"
 )
 
 type cfg1 struct {

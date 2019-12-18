@@ -9,11 +9,11 @@ import (
 	"sync"
 	"time"
 
-	"bilibili/conf/env"
-	core "bilibili/log/internal"
-	"bilibili/net/metadata"
-	"bilibili/net/trace"
-	xtime "bilibili/time"
+	"github.com/zhanghj7/bilibili/conf/env"
+	core "github.com/zhanghj7/bilibili/log/internal"
+	"github.com/zhanghj7/bilibili/net/metadata"
+	"github.com/zhanghj7/bilibili/net/trace"
+	xtime "github.com/zhanghj7/bilibili/time"
 )
 
 const (

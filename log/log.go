@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"time"
 
-	"bilibili/conf/env"
-	core "bilibili/log/internal"
-	"bilibili/stat/prom"
-	xtime "bilibili/time"
+	"github.com/zhanghj7/bilibili/conf/env"
+	core "github.com/zhanghj7/bilibili/log/internal"
+	"github.com/zhanghj7/bilibili/stat/prom"
+	xtime "github.com/zhanghj7/bilibili/time"
 )
 
 // Config log config.

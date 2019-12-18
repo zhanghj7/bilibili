@@ -3,8 +3,8 @@ package dsn_test
 import (
 	"log"
 
-	"bilibili/conf/dsn"
-	xtime "bilibili/time"
+	"github.com/zhanghj7/bilibili/conf/dsn"
+	xtime "github.com/zhanghj7/bilibili/time"
 )
 
 // Config struct

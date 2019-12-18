@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	protogen "bilibili/net/trace/proto"
+	protogen "github.com/zhanghj7/bilibili/net/trace/proto"
 )
 
 const (

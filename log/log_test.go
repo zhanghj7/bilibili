@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"bilibili/net/metadata"
+	"github.com/zhanghj7/bilibili/net/metadata"
 
 	"github.com/stretchr/testify/assert"
 )

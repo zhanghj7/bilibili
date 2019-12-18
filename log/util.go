@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"sync"
 
-	"bilibili/conf/env"
-	"bilibili/net/metadata"
-	"bilibili/net/trace"
+	"github.com/zhanghj7/bilibili/conf/env"
+	"github.com/zhanghj7/bilibili/net/metadata"
+	"github.com/zhanghj7/bilibili/net/trace"
 )
 
 var fm sync.Map

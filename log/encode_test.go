@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"bilibili/log/internal"
+	"github.com/zhanghj7/bilibili/log/internal"
 )
 
 func TestJsonEncode(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"bilibili/conf/dsn"
+	"github.com/zhanghj7/bilibili/conf/dsn"
 
 	"github.com/pkg/errors"
 )

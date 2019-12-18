@@ -8,8 +8,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"bilibili/conf/env"
-	"bilibili/net/metadata"
+	"github.com/zhanghj7/bilibili/conf/env"
+	"github.com/zhanghj7/bilibili/net/metadata"
 )
 
 var _hostHash byte
