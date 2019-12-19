@@ -147,6 +147,7 @@ func init() {
 		Family: env.AppID,
 		Host:   host,
 	}
+	// default
 	h = newHandlers([]string{}, NewStdout(0))
 
 	addFlag(flag.CommandLine)
