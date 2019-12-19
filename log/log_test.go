@@ -30,6 +30,19 @@ func initFile() {
 	fmt.Println(conf)
 }
 
+func TestInit(t *testing.T) {
+	conf := &Config{
+		Dir: "/Users/zhanghaijiang/Documents/zhj/work/go/src/manager/library/log/bb",
+		// VLevel:  2,
+		//Module:     map[string]int32{"log_test": 1},
+		RotateSize: 1,
+		//MaxLogFile: 1,
+		Stdout: true,
+	}
+	Init(conf)
+	fmt.Println(conf)
+}
+
 func initAgent() {
 	conf := &Config{
 		Agent: &AgentConfig{
