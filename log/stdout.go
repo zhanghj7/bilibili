@@ -9,33 +9,37 @@ import (
 
 const defaultPattern = "%L %d-%T %f %M"
 
-var _defaultStdout = NewStdout()
+var _defaultStdout = NewStdout(0)
 
 // StdoutHandler stdout log handler
 type StdoutHandler struct {
 	out    io.Writer
 	render Render
+	lv     Level
 }
 
 // NewStdout create a stdout log handler
-func NewStdout() *StdoutHandler {
+func NewStdout(lv Level) *StdoutHandler {
 	return &StdoutHandler{
 		out:    os.Stderr,
 		render: newPatternRender(defaultPattern),
+		lv:     lv,
 	}
 }
 
 // Log stdout loging, only for developing env.
 func (h *StdoutHandler) Log(ctx context.Context, lv Level, args ...D) {
-	d := make(map[string]interface{}, 10+len(args))
-	for _, arg := range args {
-		d[arg.Key] = arg.Value
+	if h.lv == lv || h.lv == _debugLevel {
+		d := make(map[string]interface{}, 10+len(args))
+		for _, arg := range args {
+			d[arg.Key] = arg.Value
+		}
+		// add extra fields
+		addExtraField(ctx, d)
+		d[_time] = time.Now().Format(_timeFormat)
+		h.render.Render(h.out, d)
+		h.out.Write([]byte("\n"))
 	}
-	// add extra fields
-	addExtraField(ctx, d)
-	d[_time] = time.Now().Format(_timeFormat)
-	h.render.Render(h.out, d)
-	h.out.Write([]byte("\n"))
 }
 
 // Close stdout loging

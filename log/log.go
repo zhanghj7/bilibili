@@ -147,7 +147,7 @@ func init() {
 		Family: env.AppID,
 		Host:   host,
 	}
-	h = newHandlers([]string{}, NewStdout())
+	h = newHandlers([]string{}, NewStdout(0))
 
 	addFlag(flag.CommandLine)
 }
@@ -213,10 +213,14 @@ func Init(conf *Config) {
 	var hs []Handler
 	// when env is dev
 	if conf.Stdout || (isNil && (env.DeployEnv == "" || env.DeployEnv == env.DeployEnvDev)) || _noagent {
-		hs = append(hs, NewStdout())
+		hs = append(hs, NewStdout(Level(conf.V)))
 	}
 	if conf.Dir != "" {
-		hs = append(hs, NewFile(conf.Dir, conf.FileBufferSize, conf.RotateSize, conf.MaxLogFile))
+		var lev int32 = 0
+		if conf.V != 0 {
+			lev = conf.V
+		}
+		hs = append(hs, NewFile(conf.Dir, conf.FileBufferSize, conf.RotateSize, conf.MaxLogFile, Level(lev)))
 	}
 	// when env is not dev
 	if !_noagent && (conf.Agent != nil || (isNil && env.DeployEnv != "" && env.DeployEnv != env.DeployEnvDev)) {

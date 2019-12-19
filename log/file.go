@@ -27,10 +27,11 @@ var _fileNames = map[int]string{
 type FileHandler struct {
 	render Render
 	fws    [_totalIdx]*filewriter.FileWriter
+	lv     Level
 }
 
 // NewFile crete a file logger.
-func NewFile(dir string, bufferSize, rotateSize int64, maxLogFile int) *FileHandler {
+func NewFile(dir string, bufferSize, rotateSize int64, maxLogFile int, lv Level) *FileHandler {
 	// new info writer
 	newWriter := func(name string) *filewriter.FileWriter {
 		var options []filewriter.Option
@@ -48,6 +49,7 @@ func NewFile(dir string, bufferSize, rotateSize int64, maxLogFile int) *FileHand
 	}
 	handler := &FileHandler{
 		render: newPatternRender("[%D %T] [%L] [%S] %M"),
+		lv:     lv,
 	}
 	for idx, name := range _fileNames {
 		handler.fws[idx] = newWriter(name)
@@ -57,24 +59,26 @@ func NewFile(dir string, bufferSize, rotateSize int64, maxLogFile int) *FileHand
 
 // Log loggint to file .
 func (h *FileHandler) Log(ctx context.Context, lv Level, args ...D) {
-	d := make(map[string]interface{}, 10+len(args))
-	for _, arg := range args {
-		d[arg.Key] = arg.Value
+	if h.lv == lv || h.lv == _debugLevel {
+		d := make(map[string]interface{}, 10+len(args))
+		for _, arg := range args {
+			d[arg.Key] = arg.Value
+		}
+		// add extra fields
+		addExtraField(ctx, d)
+		d[_time] = time.Now().Format(_timeFormat)
+		var w io.Writer
+		switch lv {
+		case _warnLevel:
+			w = h.fws[_warnIdx]
+		case _errorLevel:
+			w = h.fws[_errorIdx]
+		default:
+			w = h.fws[_infoIdx]
+		}
+		h.render.Render(w, d)
+		w.Write([]byte("\n"))
 	}
-	// add extra fields
-	addExtraField(ctx, d)
-	d[_time] = time.Now().Format(_timeFormat)
-	var w io.Writer
-	switch lv {
-	case _warnLevel:
-		w = h.fws[_warnIdx]
-	case _errorLevel:
-		w = h.fws[_errorIdx]
-	default:
-		w = h.fws[_infoIdx]
-	}
-	h.render.Render(w, d)
-	w.Write([]byte("\n"))
 }
 
 // Close log handler
