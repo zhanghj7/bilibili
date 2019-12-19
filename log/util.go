@@ -3,8 +3,10 @@ package log
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 	"runtime"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/zhanghj7/bilibili/conf/env"
@@ -42,11 +44,16 @@ func addExtraField(ctx context.Context, fields map[string]interface{}) {
 
 // funcName get func name.
 func funcName(skip int) (name string) {
-	if pc, _, lineNo, ok := runtime.Caller(skip); ok {
+	if pc, file, lineNo, ok := runtime.Caller(skip); ok {
 		if v, ok := fm.Load(pc); ok {
 			name = v.(string)
 		} else {
-			name = runtime.FuncForPC(pc).Name() + ":" + strconv.FormatInt(int64(lineNo), 10)
+			//name = runtime.FuncForPC(pc).Name() + ":" + strconv.FormatInt(int64(lineNo), 10)
+			funcname1 := runtime.FuncForPC(pc).Name()    // main.(*MyStruct).foo
+			funcname := filepath.Ext(funcname1)          // .foo
+			funcname = strings.TrimPrefix(funcname, ".") // fo
+			file = funcname1[0:strings.Index(funcname1, ".")] + "/" + filepath.Base(file)
+			name = file + ":" + funcname + ":" + strconv.FormatInt(int64(lineNo), 10)
 			fm.Store(pc, name)
 		}
 	}

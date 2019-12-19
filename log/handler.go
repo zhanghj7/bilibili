@@ -88,7 +88,7 @@ func (hs Handlers) Log(c context.Context, lv Level, d ...D) {
 		}
 	}
 	if fn == "" {
-		d = append(d, KV(_source, funcName(4)))
+		d = append(d, KV(_source, funcName(3)))
 	}
 	d = append(d, KV(_time, time.Now()), KV(_levelValue, int(lv)), KV(_level, lv.String()))
 	errIncr(lv, fn)
