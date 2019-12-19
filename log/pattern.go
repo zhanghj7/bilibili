@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"path"
+	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -112,9 +114,17 @@ func keyFactory(key string) func(map[string]interface{}) string {
 }
 
 func longSource(map[string]interface{}) string {
-	if _, file, lineNo, ok := runtime.Caller(6); ok {
-		return fmt.Sprintf("%s:%d", file, lineNo)
+	if pc, file, lineNo, ok := runtime.Caller(5); ok {
+		funcName1 := runtime.FuncForPC(pc).Name()    // main.(*MyStruct).foo
+		funcName := filepath.Ext(funcName1)          // .foo
+		funcName = strings.TrimPrefix(funcName, ".") // fo
+		file = funcName1[0:strings.Index(funcName1, ".")] + "/" + filepath.Base(file)
+		name := file + ":" + funcName + ":" + strconv.FormatInt(int64(lineNo), 10)
+		return name
 	}
+	//if _, file, lineNo, ok := runtime.Caller(6); ok {
+	//	return fmt.Sprintf("%s:%d", file, lineNo)
+	//}
 	return "unknown:0"
 }
 
