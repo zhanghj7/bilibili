@@ -216,6 +216,7 @@ func Init(conf *Config) {
 		hs = append(hs, NewStdout(Level(conf.V)))
 	}
 	if conf.Dir != "" {
+		// default
 		var lev int32 = 0
 		if conf.V != 0 {
 			lev = conf.V
