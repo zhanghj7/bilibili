@@ -147,7 +147,6 @@ func init() {
 		Family: env.AppID,
 		Host:   host,
 	}
-	// default
 	h = newHandlers([]string{}, NewStdout(0))
 
 	addFlag(flag.CommandLine)
@@ -217,7 +216,6 @@ func Init(conf *Config) {
 		hs = append(hs, NewStdout(Level(conf.V)))
 	}
 	if conf.Dir != "" {
-		// default
 		var lev int32 = 0
 		if conf.V != 0 {
 			lev = conf.V
@@ -234,17 +232,20 @@ func Init(conf *Config) {
 
 // Info logs a message at the info log level.
 func Info(format string, args ...interface{}) {
-	h.Log(context.Background(), _infoLevel, KV(_log, fmt.Sprintf(format, args...)))
+	strFor := "%c[1;32m%s%c[0m"
+	h.Log(context.Background(), _infoLevel, KV(_log, fmt.Sprintf(format, args...)), KV(_color_format, strFor))
 }
 
 // Warn logs a message at the warning log level.
 func Warn(format string, args ...interface{}) {
-	h.Log(context.Background(), _warnLevel, KV(_log, fmt.Sprintf(format, args...)))
+	strFor := "%c[1;33m%s%c[0m"
+	h.Log(context.Background(), _warnLevel, KV(_log, fmt.Sprintf(format, args...)), KV(_color_format, strFor))
 }
 
 // Error logs a message at the error log level.
 func Error(format string, args ...interface{}) {
-	h.Log(context.Background(), _errorLevel, KV(_log, fmt.Sprintf(format, args...)))
+	strFor := "%c[1;31m%s%c[0m"
+	h.Log(context.Background(), _errorLevel, KV(_log, fmt.Sprintf(format, args...)), KV(_color_format, strFor))
 }
 
 // Infov logs a message at the info log level.

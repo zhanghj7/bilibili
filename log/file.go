@@ -62,7 +62,9 @@ func (h *FileHandler) Log(ctx context.Context, lv Level, args ...D) {
 	if h.lv == lv || h.lv == _debugLevel {
 		d := make(map[string]interface{}, 10+len(args))
 		for _, arg := range args {
-			d[arg.Key] = arg.Value
+			if arg.Key != _color_format {
+				d[arg.Key] = arg.Value
+			}
 		}
 		// add extra fields
 		addExtraField(ctx, d)

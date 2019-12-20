@@ -2,6 +2,7 @@ package log
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	pkgerr "github.com/pkg/errors"
@@ -41,7 +42,8 @@ const (
 	// color.
 	_color = "color"
 	// cluster.
-	_cluster = "cluster"
+	_cluster      = "cluster"
+	_color_format = "colorformat"
 )
 
 // Handler is used to handle log events, outputting them to
@@ -112,4 +114,9 @@ func (hs Handlers) SetFormat(format string) {
 	for _, h := range hs.handlers {
 		h.SetFormat(format)
 	}
+}
+
+func formatColor(format string, value string) string {
+	str := fmt.Sprintf(format, 0x1B, value, 0x1B)
+	return str
 }

@@ -103,13 +103,24 @@ func textFactory(text string) func(map[string]interface{}) string {
 }
 func keyFactory(key string) func(map[string]interface{}) string {
 	return func(d map[string]interface{}) string {
-		if v, ok := d[key]; ok {
-			if s, ok := v.(string); ok {
-				return s
+		if d["colorformat"] != nil {
+			colorFormat := d["colorformat"].(string)
+			if v, ok := d[key]; ok {
+				if s, ok := v.(string); ok {
+					return formatColor(colorFormat, s)
+				}
+				return formatColor(colorFormat, fmt.Sprint(v))
 			}
-			return fmt.Sprint(v)
+			return ""
+		} else {
+			if v, ok := d[key]; ok {
+				if s, ok := v.(string); ok {
+					return s
+				}
+				return fmt.Sprint(v)
+			}
+			return ""
 		}
-		return ""
 	}
 }
 
@@ -135,25 +146,46 @@ func shortSource(map[string]interface{}) string {
 	return "unknown:0"
 }
 
-func longTime(map[string]interface{}) string {
-	return time.Now().Format("15:04:05.000")
+func longTime(data map[string]interface{}) string {
+	date := time.Now().Format("15:04:05.000")
+	if data["colorformat"] != nil {
+		colorFormat := data["colorformat"].(string)
+		date = formatColor(colorFormat, date)
+	}
+	return date
 }
 
-func shortTime(map[string]interface{}) string {
-	return time.Now().Format("15:04")
+func shortTime(data map[string]interface{}) string {
+	date := time.Now().Format("15:04")
+	if data["colorformat"] != nil {
+		colorFormat := data["colorformat"].(string)
+		date = formatColor(colorFormat, date)
+	}
+	return date
 }
 
-func longDate(map[string]interface{}) string {
-	return time.Now().Format("2006/01/02")
+func longDate(data map[string]interface{}) string {
+	date := time.Now().Format("2006/01/02")
+	if data["colorformat"] != nil {
+		colorFormat := data["colorformat"].(string)
+		date = formatColor(colorFormat, date)
+	}
+	return date
 }
 
-func shortDate(map[string]interface{}) string {
-	return time.Now().Format("01/02")
+func shortDate(data map[string]interface{}) string {
+	date := time.Now().Format("01/02")
+	if data["colorformat"] != nil {
+		colorFormat := data["colorformat"].(string)
+		date = formatColor(colorFormat, date)
+	}
+	return date
+	//return time.Now().Format("01/02")
 }
 
 func isInternalKey(k string) bool {
 	switch k {
-	case _level, _levelValue, _time, _source, _instanceID, _appID, _deplyEnv, _zone:
+	case _level, _levelValue, _time, _source, _instanceID, _appID, _deplyEnv, _zone, _color_format:
 		return true
 	}
 	return false
@@ -173,5 +205,10 @@ func message(d map[string]interface{}) string {
 		s = append(s, fmt.Sprintf("%s=%v", k, v))
 	}
 	s = append(s, m)
-	return strings.Join(s, " ")
+	s1 := strings.Join(s, " ")
+	if d["colorformat"] != nil {
+		colorFormat := d["colorformat"].(string)
+		s1 = formatColor(colorFormat, s1)
+	}
+	return s1
 }
